@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이지현 | HUSS 바이브 코딩 경진대회</title>
+<style>
+  :root{
+    --bg:#f5f8ff; --card:#ffffff; --ink:#14213d; --muted:#5b6785;
+    --primary:#1d4ed8; --accent:#f59e0b; --line:#e2e8f5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.7;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px;
+  }
+  .card{
+    width:100%; max-width:560px; background:var(--card); border-radius:24px;
+    box-shadow:0 12px 40px rgba(29,78,216,.12); overflow:hidden;
+  }
+  .hero{
+    background:linear-gradient(135deg,var(--primary),#4f7cff);
+    color:#fff; text-align:center; padding:40px 24px 56px;
+  }
+  .badge{
+    display:inline-block; font-size:13px; padding:4px 12px; border-radius:999px;
+    background:rgba(255,255,255,.18); margin-bottom:20px; letter-spacing:.02em;
+  }
+  .avatar{
+    width:96px; height:96px; border-radius:50%; background:#fff; color:var(--primary);
+    font-size:34px; font-weight:800; display:flex; align-items:center; justify-content:center;
+    margin:0 auto 16px; border:4px solid rgba(255,255,255,.5);
+  }
+  h1{font-size:30px; letter-spacing:.04em}
+  .sub{opacity:.9; margin-top:4px}
+  .body{padding:0 28px 32px; margin-top:-28px}
+  .info{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:0 6px 18px rgba(20,33,61,.06); padding:8px 20px;
+  }
+  .row{display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row span:first-child{color:var(--muted); font-size:14px}
+  .row span:last-child{font-weight:700; text-align:right}
+  h2{font-size:16px; margin:28px 0 10px; display:flex; align-items:center; gap:8px}
+  h2::before{content:""; width:5px; height:18px; border-radius:3px; background:var(--accent)}
+  p{color:var(--muted); font-size:15px}
+  .tags{display:flex; flex-wrap:wrap; gap:8px}
+  .tags span{
+    font-size:13px; padding:6px 12px; border-radius:999px;
+    background:#eaf0ff; color:var(--primary); font-weight:600;
+  }
+  footer{text-align:center; font-size:12px; color:var(--muted); padding-bottom:24px}
+</style>
+</head>
+<body>
+  <main class="card">
+    <section class="hero">
+      <div class="badge">HUSS 바이브 코딩 경진대회 나온 팀이랑께</div>
+      <div class="avatar">JH</div>
+      <h1>이지현</h1>
+      <div class="sub">Lee Ji-hyeon</div>
+    </section>
+
+    <section class="body">
+      <div class="info">
+        <div class="row"><span>어디 댕기냐</span><span>전주대학교</span></div>
+        <div class="row"><span>뭐 배우냐</span><span>행정학과</span></div>
+        <div class="row"><span>몇 학년이냐</span><span>4학년</span></div>
+        <div class="row"><span>학번</span><span>(나중에 적을랑께)</span></div>
+      </div>
+
+      <h2>안녕하쇼잉</h2>
+      <p>
+        전주대학교 행정학과 4학년 이지현이랑께요.
+        이번 HUSS 바이브 코딩 경진대회에 팀원으로 나왔는디,
+        행정학에서 배운 눈이랑 AI 코딩을 딱 붙여서 사람들헌테 도움 되는 걸 맹글어 볼라고 허요.
+      </p>
+
+      <h2>팀에서 나는</h2>
+      <p>행정학 공부헌 걸 바탕으로 문제를 딱 짚고, 팀원들이랑 같이 아이디어를 진짜 쓸 만헌 서비스로 다듬어 가요.</p>
+
+      <h2>키워드</h2>
+      <div class="tags">
+        <span>#행정학</span><span>#공공문제 해결</span><span>#바이브 코딩</span><span>#같이 허기</span>
+      </div>
+    </section>
+
+    <footer>© 2026 이지현 · 전주대학교 행정학과</footer>
+  </main>
+</body>
+</html>

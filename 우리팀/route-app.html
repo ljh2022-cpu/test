@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전주 한 바퀴 - 관광 루트 짜기</title>
+<style>
+  :root{--bg:#f5f8ff;--card:#fff;--ink:#14213d;--muted:#5b6785;--primary:#1d4ed8;--accent:#f59e0b;--line:#e2e8f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Pretendard","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  header{background:linear-gradient(135deg,var(--primary),#4f7cff);color:#fff;padding:40px 20px 56px;text-align:center}
+  header .tag{display:inline-block;font-size:12px;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:999px;margin-bottom:12px}
+  header h1{font-size:28px}
+  header p{opacity:.92;margin-top:8px;font-size:15px}
+  main{max-width:820px;margin:-28px auto 40px;padding:0 16px}
+  .panel{background:var(--card);border-radius:18px;box-shadow:0 8px 28px rgba(29,78,216,.1);padding:22px}
+  h2{font-size:16px;margin-bottom:12px}
+  .field{margin-bottom:16px}
+  .field > label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips input{display:none}
+  .chips label{padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer;background:#fff;user-select:none}
+  .chips input:checked + label{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:14px}
+  button{width:100%;padding:13px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+  button:hover{background:#1e40af}
+  #result{margin-top:24px}
+  .day{margin-bottom:22px}
+  .day h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .day h3::before{content:"";width:5px;height:18px;border-radius:3px;background:var(--accent)}
+  .stop{display:flex;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;background:#fff}
+  .time{min-width:56px;font-weight:800;color:var(--primary);font-size:14px}
+  .stop b{display:block}
+  .stop small{color:var(--muted)}
+  .badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;background:#eaf0ff;color:var(--primary);margin-left:6px;font-weight:600}
+  .badge.out{background:#fff4de;color:#b45309}
+  .move{font-size:12px;color:var(--muted);text-align:center;margin:-2px 0 6px}
+  .summary{background:#eaf0ff;border-radius:12px;padding:12px 14px;font-size:14px;margin-bottom:18px}
+  .note{margin-top:20px;font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">HUSS 바이브 코딩 경진대회 · 지역 가치 맹글기 아이디어</div>
+  <h1>전주 한 바퀴</h1>
+  <p>한옥마을 밖까지 이어지는 1~2일 맞춤 관광 루트를 짜 드릴랑께요</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>여행 사정을 골라 주쇼잉</h2>
+
+    <div class="field"><label>얼마나 놀다 갈라고</label>
+      <div class="chips">
+        <input type="radio" name="days" id="d1" value="1" checked><label for="d1">당일치기</label>
+        <input type="radio" name="days" id="d2" value="2"><label for="d2">1박 2일</label>
+      </div></div>
+
+    <div class="field"><label>뭐가 땡기오 (여러 개 골라도 돼요)</label>
+      <div class="chips" id="interests">
+        <input type="checkbox" id="i1" value="history" checked><label for="i1">역사·전통</label>
+        <input type="checkbox" id="i2" value="food" checked><label for="i2">먹거리</label>
+        <input type="checkbox" id="i3" value="art"><label for="i3">예술·감성</label>
+        <input type="checkbox" id="i4" value="nature"><label for="i4">자연·산책</label>
+        <input type="checkbox" id="i5" value="craft"><label for="i5">체험</label>
+      </div></div>
+
+    <div class="field"><label>어떻게 돌아댕길라오</label>
+      <div class="chips">
+        <input type="radio" name="pace" id="p1" value="slow"><label for="p1">느긋허게</label>
+        <input type="radio" name="pace" id="p2" value="normal" checked><label for="p2">보통으로</label>
+        <input type="radio" name="pace" id="p3" value="fast"><label for="p3">알차게</label>
+      </div></div>
+
+    <div class="field">
+      <label class="toggle"><input type="checkbox" id="outside" checked> 한옥마을 밖 장소를 더 많이 넣기 (관광객 퍼뜨리기)</label>
+    </div>
+
+    <button id="go">나만의 루트 맹글기</button>
+    <div id="result"></div>
+    <p class="note">※ 장소 정보는 일반적인 소개로 맹근 시연용이랑께. 운영 시간·쉬는 날·이동 시간은 가기 전에 꼭 확인허쇼잉.</p>
+  </section>
+</main>
+
+<script>
+// area: hanok(한옥마을권) / old(구도심) / out(그 밖)
+const PLACES = [
+  {n:"경기전",         t:["history"],        a:"hanok", m:60, d:"조선 태조 어진을 모신 데. 한옥마을 대표 명소랑께"},
+  {n:"전동성당",       t:["history","art"],  a:"hanok", m:45, d:"붉은 벽돌로 지은 로마네스크·비잔틴 양식 성당이요"},
+  {n:"전주향교",       t:["history","nature"],a:"hanok",m:45, d:"조용히 걷기 존 전통 교육 공간이요"},
+  {n:"한옥마을 공방 체험",t:["craft"],        a:"hanok", m:70, d:"한지·전통 공예를 해볼 수 있는 공방 골목이요"},
+  {n:"전라감영",       t:["history"],        a:"old",   m:45, d:"전라도를 다스리던 관청 터를 복원헌 곳이요"},
+  {n:"영화의 거리",    t:["art"],            a:"old",   m:45, d:"영화 이야기 따라 걷는 구도심 거리요"},
+  {n:"객리단길 골목",  t:["art","food"],     a:"old",   m:60, d:"개성 넘치는 카페랑 가게가 모인 구도심 골목이요"},
+  {n:"서학동예술마을", t:["art","craft"],    a:"out",   m:70, d:"예술가들이 모여 사는 골목 마을이요"},
+  {n:"덕진공원",       t:["nature"],         a:"out",   m:70, d:"연못이랑 산책로가 있는 시민 쉼터요"},
+  {n:"전주수목원",     t:["nature"],         a:"out",   m:90, d:"사계절 식물을 볼 수 있는 산책 공간이요"},
+  {n:"팔복예술공장",   t:["art"],            a:"out",   m:70, d:"옛 공장을 문화공간으로 바꾼 데요"},
+  {n:"국립전주박물관", t:["history","art"],  a:"out",   m:80, d:"호남 문화유산을 만나는 박물관이요"}
+];
+const MEALS = {
+  lunch:{n:"남부시장 점심",   t:["food"], a:"old", m:70, d:"전통시장서 지역 먹거리로 점심 때우기"},
+  dinner:{n:"전주 한식 저녁", t:["food"], a:"old", m:80, d:"비빔밥·콩나물국밥 같은 지역 음식으로 저녁"},
+  dinner2:{n:"구도심 맛집 저녁", t:["food"], a:"old", m:80, d:"객리단길 근처서 저녁"}
+};
+const AREA = {hanok:"한옥마을권", old:"구도심", out:"한옥마을 밖"};
+const PACE = {slow:3, normal:4, fast:5};   // 하루 관광지 수(식사 제외)
+const MOVE = 20;                            // 이동 시간 가정(분)
+
+function fmt(min){const h=String(Math.floor(min/60)).padStart(2,"0"), m=String(min%60).padStart(2,"0"); return h+":"+m;}
+
+function pick(pool, n, interests, preferOut){
+  const score = p => {
+    let s = p.t.filter(x=>interests.includes(x)).length * 2;
+    if(preferOut && p.a==="out") s += 2;
+    if(preferOut && p.a==="old") s += 1;
+    return s + Math.random()*0.8;
+  };
+  return [...pool].sort((a,b)=>score(b)-score(a)).slice(0,n);
+}
+function order(list){ // 한옥마을 → 구도심 → 외곽 순으로 이동 줄이기
+  const rank={hanok:0,old:1,out:2};
+  return [...list].sort((a,b)=>rank[a.a]-rank[b.a]);
+}
+
+function buildDay(pool, count, interests, preferOut, dinner){
+  const spots = order(pick(pool, count, interests, preferOut));
+  const morning = spots.slice(0, Math.ceil(spots.length/2));
+  const afternoon = spots.slice(Math.ceil(spots.length/2));
+  const seq = [...morning, MEALS.lunch, ...afternoon, dinner];
+  let t = 10*60, out = [];
+  seq.forEach((p,i)=>{
+    out.push({start:t, p});
+    t += p.m + (i<seq.length-1 ? MOVE : 0);
+  });
+  return out;
+}
+
+function render(days){
+  const interests=[...document.querySelectorAll("#interests input:checked")].map(i=>i.value);
+  const pace=document.querySelector("input[name=pace]:checked").value;
+  const preferOut=document.getElementById("outside").checked;
+  if(!interests.length){ document.getElementById("result").innerHTML='<p class="note">관심사를 하나라도 골라 주쇼잉.</p>'; return; }
+
+  let pool=[...PLACES], html="", outCount=0, total=0;
+  for(let d=1; d<=days; d++){
+    const plan = buildDay(pool, PACE[pace], interests, preferOut, d===1?MEALS.dinner:MEALS.dinner2);
+    plan.forEach(s=>{ pool = pool.filter(x=>x!==s.p); if(!Object.values(MEALS).includes(s.p)){ total++; if(s.p.a==="out") outCount++; } });
+    html += `<div class="day"><h3>${d}일차</h3>` + plan.map((s,i)=>{
+      const next = plan[i+1];
+      const badge = s.p.a==="out" ? '<span class="badge out">한옥마을 밖</span>' : `<span class="badge">${AREA[s.p.a]}</span>`;
+      return `<div class="stop"><div class="time">${fmt(s.start)}</div><div><b>${s.p.n}${badge}</b><small>${s.p.d} · 약 ${s.p.m}분</small></div></div>` +
+             (next?`<div class="move">이동 약 ${MOVE}분 (대충 잡은 거)</div>`:"");
+    }).join("") + `</div>`;
+  }
+  const ratio = total ? Math.round(outCount/total*100) : 0;
+  html = `<div class="summary">이 루트 관광지 중 <b>${outCount}곳</b>(${ratio}%)이 한옥마을 밖이랑께요.</div>` + html;
+  document.getElementById("result").innerHTML = html;
+}
+document.getElementById("go").addEventListener("click", ()=>{
+  render(Number(document.querySelector("input[name=days]:checked").value));
+});
+</script>
+</body>
+</html>
