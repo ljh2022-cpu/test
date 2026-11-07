@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전주 맞춤밥상</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--yellow:#FFD84D;--ink:#1A1A1A;--card:#fff;--mute:#5c5640;--line:#1A1A1A22;--ok:#1D7A4B;--unsure:#B26A00;--no:#C0392B;--accent:#1A1A1A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--yellow);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+main{max-width:720px;margin:0 auto;padding:22px 16px 60px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:1px}
+h1{margin:4px 0 6px;font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-1px}
+.sub{margin:0 0 14px;font-weight:500}
+.banner{background:var(--ink);color:var(--yellow);border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:14px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+label.f{display:flex;flex-direction:column;font-size:13px;font-weight:600;gap:3px}
+input,select{font:inherit;padding:8px;border:2px solid var(--ink);border-radius:10px;background:#fff;color:var(--ink)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--ink);vertical-align:-3px}
+.person{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.person:first-child{border-top:0}
+.chip input{display:none}.chip span{display:inline-block;padding:4px 12px;border:2px solid var(--ink);border-radius:999px;cursor:pointer;font-size:14px;font-weight:600}
+.chip input:checked+span{background:var(--ink);color:var(--yellow)}
+button{font:inherit;font-weight:700;cursor:pointer;border-radius:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);padding:8px 14px}
+button:active{transform:scale(.98)}
+button.primary{background:var(--ink);color:var(--yellow);width:100%;padding:13px;margin-top:10px;font-size:17px}
+button.alt{background:var(--ink);color:var(--yellow)}
+button.link{border:0;background:none;color:var(--mute);text-decoration:underline;padding:0 4px;margin-left:auto;font-weight:500}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:12px 0;background:var(--ink);color:var(--yellow);border-radius:14px;padding:12px 6px}
+.metrics div{text-align:center;padding:0 4px}
+.metrics span{display:block;font-size:12px}.metrics b{font-size:22px;font-weight:800}
+.route{list-style:none;padding:0;margin:0}
+.route li{display:flex;gap:12px;padding:12px;margin-bottom:8px;background:var(--card);border-radius:14px}
+.route li.gap{background:transparent;border:2px dashed var(--ink);color:var(--ink);font-weight:700;padding:10px 12px}
+.time{min-width:92px;font-weight:800;font-variant-numeric:tabular-nums}
+.body{flex:1}.nm{font-weight:800;font-size:17px}
+small{color:var(--mute)}
+.tag{display:inline-block;font-size:12px;padding:1px 9px;border-radius:999px;border:1.5px solid var(--ink);font-weight:600;vertical-align:1px}
+.tag.out{background:var(--yellow)}
+.tag.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.tag.unsure{background:var(--unsure);border-color:var(--unsure);color:#fff}
+.tag.no{background:var(--no);border-color:var(--no);color:#fff}
+.verdicts{margin-top:6px}.vd{padding:4px 0}
+.order{font-size:13px;margin-top:3px;background:#FFF4C2;padding:6px 8px;border-radius:8px}
+.alert{background:var(--no);color:#fff;border-radius:12px;padding:10px 12px;margin:10px 0;font-size:14px;font-weight:600}
+.note{background:#fff;border:2px dashed var(--ink);border-radius:12px;padding:10px 12px;margin:10px 0;font-size:14px}
+.warn{color:var(--unsure);font-size:12px;font-weight:700}
+.next{margin-top:16px;border-top:3px solid var(--ink);padding-top:8px}
+h3,h4{margin:10px 0 6px}
+.mapbox{background:var(--card);border-radius:14px;padding:10px;margin:0 0 10px}
+.mapt{font-weight:800;margin:0 2px 6px}
+.lmap{height:320px;border-radius:12px;z-index:0}
+.pin{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 13px system-ui,sans-serif;border:2px solid #1A1A1A}
+.pin.out{background:#1A1A1A;color:#FFD84D}.pin.in{background:#fff;color:#1A1A1A}
+.num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--yellow);font-size:13px;margin-right:6px;vertical-align:1px}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker" id="title"></div>
+  <h1 id="hero"></h1><p class="sub" id="sub"></p>
+  <div class="banner" id="banner"></div>
+
+  <div class="card">
+    <div class="grid">
+      <label class="f"><span id="lbDate"></span><input type="date" id="date"></label>
+      <label class="f"><span id="lbArr"></span><input type="time" id="arr"></label>
+      <label class="f"><span id="lbDep"></span><input type="time" id="dep"></label>
+      <label class="f"><span id="lbMode"></span><select id="mode"><option value="walk" id="optWalk"></option><option value="car" id="optCar"></option></select></label>
+      <label class="f"><span id="lbLang"></span><select id="lang"><option value="ko">한국어</option><option value="en">English</option></select></label>
+    </div>
+    <h3 id="lbPeople" style="margin:16px 0 4px;font-size:15px"></h3>
+    <div id="people"></div>
+    <button id="btnAdd"></button>
+    <label style="display:block;margin-top:12px;font-weight:600"><input type="checkbox" id="indoor"> <span id="lbIndoor"></span></label>
+    <button class="primary" id="btnMake"></button>
+    <div class="row"><button id="btnA"></button><button id="btnB"></button></div>
+  </div>
+
+  <div id="result"></div>
+</main>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
