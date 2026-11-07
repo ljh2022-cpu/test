@@ -102,13 +102,13 @@
     var k = Math.min((W - 2 * pad) / spanX, (H - 2 * pad) / spanY), offX = (W - spanX * k) / 2, offY = (H - spanY * k) / 2;
     var px = function (x) { return offX + (x - minX) * k; }, py = function (y) { return H - (offY + (y - minY) * k); };
     var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(S.mapTitle) + '" style="width:100%;height:auto;display:block;border-radius:14px;background:#FBF8F1">';
-    svg += '<circle cx="' + px(0) + '" cy="' + py(0) + '" r="' + (0.5 * k) + '" fill="#FFD84D55" stroke="#1A1A1A" stroke-dasharray="4 4"/>';
+    svg += '<circle cx="' + px(0) + '" cy="' + py(0) + '" r="' + (0.5 * k) + '" fill="#3DDC8455" stroke="#1A1A1A" stroke-dasharray="4 4"/>';
     svg += '<text x="' + px(0) + '" y="' + (py(0) + 0.5 * k + 14) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#1A1A1A">' + esc(S.hanokIn) + '</text>';
     svg += '<polyline points="' + res.stops.map(function (s) { return px(s.place.x) + ',' + py(s.place.y); }).join(' ') + '" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-dasharray="7 5" stroke-linejoin="round"/>';
     res.stops.forEach(function (s, i) {
       var inH = s.place.area === 'hanok', x = px(s.place.x), y = py(s.place.y);
       svg += '<circle cx="' + x + '" cy="' + y + '" r="13" fill="' + (inH ? '#fff' : '#1A1A1A') + '" stroke="#1A1A1A" stroke-width="2"/>'
-        + '<text x="' + x + '" y="' + (y + 5) + '" text-anchor="middle" font-size="13" font-weight="800" fill="' + (inH ? '#1A1A1A' : '#FFD84D') + '">' + (i + 1) + '</text>';
+        + '<text x="' + x + '" y="' + (y + 5) + '" text-anchor="middle" font-size="13" font-weight="800" fill="' + (inH ? '#1A1A1A' : '#3DDC84') + '">' + (i + 1) + '</text>';
     });
     svg += '<line x1="16" y1="' + (H - 16) + '" x2="' + (16 + k) + '" y2="' + (H - 16) + '" stroke="#1A1A1A" stroke-width="3"/><text x="' + (22 + k) + '" y="' + (H - 12) + '" font-size="11" fill="#1A1A1A">1 km</text></svg>';
     return svg;
@@ -128,7 +128,7 @@
       var S = t(), map = L.map(el, { scrollWheelZoom: false });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
       var c = [HANOK.lat, HANOK.lng], pts = m.res.stops.map(function (s) { return [s.place.lat, s.place.lng]; });
-      L.circle(c, { radius: 500, color: '#1A1A1A', weight: 1.5, dashArray: '4 4', fillColor: '#FFD84D', fillOpacity: 0.35 }).addTo(map).bindTooltip(S.hanokIn);
+      L.circle(c, { radius: 500, color: '#1A1A1A', weight: 1.5, dashArray: '4 4', fillColor: '#3DDC84', fillOpacity: 0.35 }).addTo(map).bindTooltip(S.hanokIn);
       L.polyline(pts, { color: '#1A1A1A', weight: 3, dashArray: '7 5' }).addTo(map);
       m.res.stops.forEach(function (s, i) {
         var inH = s.place.area === 'hanok';
